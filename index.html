@@ -157,7 +157,82 @@ main{position:relative;z-index:1}
 .committee{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0 50px}
 .committee .person{min-width:0;padding:16px 14px;overflow-wrap:anywhere}
 @media (max-width:640px){.committee{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.committee .person{padding:12px 10px}.person b{font-size:16px!important}}
-#schedule,#offstage,#result,#winners{scroll-margin-top:16px}
+#schedule,#offstage,#location,#map,#result,#winners{scroll-margin-top:16px}
+/* INDOOR MAP */
+.imap{margin:0 0 40px;border-radius:26px;padding:24px clamp(14px,3vw,34px);background:linear-gradient(160deg,#1b1450,#0f0a2c 60%,#2a0f3a);border:1px solid rgba(94,200,255,.35);box-shadow:0 30px 70px rgba(0,0,0,.5);overflow:hidden}
+.imap-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.imap h2{margin:0;font-family:var(--ml-display);font-weight:800;font-size:clamp(24px,3.6vw,38px);line-height:1.15;color:#fff;text-shadow:2px 3px 0 #0a0620}
+.imap h2 span{display:block;font-family:var(--en-display);font-weight:900;font-size:.46em;letter-spacing:.1em;color:var(--sky)}
+.imap-ctrl{display:flex;gap:8px}
+.mbtn{width:46px;height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:linear-gradient(160deg,#3b2a7a,#22164e);color:#fff;font-size:22px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 #0d0820;font-family:var(--en)}
+.mbtn#tiltB{font-size:14px;letter-spacing:.05em}
+.mbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #0d0820}
+.mbtn:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+.imap-hint{margin:10px 0 12px;color:#d8d0f5;font-family:var(--ml-display);font-weight:600;font-size:14.5px}
+.imap-days{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0 6px}
+.imap-days::-webkit-scrollbar{display:none}
+.imap-days button{flex:0 0 auto;border:0;border-radius:99px;padding:7px 14px;font-family:var(--ml-display);font-weight:700;font-size:14px;cursor:pointer;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15)}
+.imap-days button[aria-pressed="true"]{background:var(--dc);color:#1a0f2e;border-color:transparent;box-shadow:0 0 14px var(--dc)}
+.imap-days button:focus-visible{outline:2px solid var(--yellow)}
+.scene{--S:min(560px,84vw);position:relative;height:calc(var(--S)*.86);perspective:1100px;display:grid;place-items:center;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.scene:active{cursor:grabbing}
+.plane{position:relative;width:var(--S);height:calc(var(--S)*.72);transform-style:preserve-3d;transform:rotateX(var(--tx,56deg)) rotateZ(var(--rz,-32deg));transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.plane.drag{transition:none}
+.campus{position:absolute;inset:0;border-radius:18px;background:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px) 0 0/14px 14px,linear-gradient(135deg,#3a6b45,#24543a);box-shadow:0 0 0 6px #6b5430,0 40px 60px rgba(0,0,0,.6)}
+.road{position:absolute;background:#5c5468;border-radius:6px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.08)}
+.road.r1{left:46%;top:0;width:8%;height:100%;background:repeating-linear-gradient(180deg,#5c5468 0 18px,#6a6276 18px 22px)}
+.road.r2{left:0;top:56%;width:46%;height:7%}
+.field{position:absolute;left:56%;top:58%;width:41%;height:38%;border-radius:12px;background:repeating-linear-gradient(90deg,#3fa34d 0 12%,#37944a 12% 24%);box-shadow:inset 0 0 0 3px rgba(255,255,255,.75);display:grid;place-items:center}
+.field::after{content:"";position:absolute;left:50%;top:50%;width:26%;aspect-ratio:1;border:3px solid rgba(255,255,255,.75);border-radius:50%;transform:translate(-50%,-50%)}
+.field span,.gate span{position:relative;z-index:1;font-family:var(--ml-display);font-weight:800;color:#fff;font-size:calc(var(--S)*.03);text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.gate{position:absolute;left:43%;top:94%;width:14%;height:6%;background:var(--yellow);border-radius:4px;display:grid;place-items:center}
+.gate span{color:#1a0f2e;text-shadow:none;font-size:calc(var(--S)*.022);white-space:nowrap}
+#blocks{position:absolute;inset:0;transform-style:preserve-3d}
+.bk{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--d);transform-style:preserve-3d;cursor:pointer}
+.bk .f{position:absolute;backface-visibility:hidden}
+.bk .top{inset:0;transform:translateZ(var(--h));background:linear-gradient(135deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c));border-radius:4px;display:grid;place-items:center;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+.bk .top b{font-family:var(--en);font-weight:700;font-size:calc(var(--S)*.042);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.4);line-height:1}
+.bk .top small{display:block;font-family:var(--ml-display);font-weight:700;font-size:calc(var(--S)*.018);color:#fff;opacity:.95;text-align:center;line-height:1.1}
+.bk .fr{left:0;bottom:0;width:100%;height:var(--h);transform-origin:bottom;transform:rotateX(-90deg);background:color-mix(in srgb,var(--c) 60%,#000)}
+.bk .fr::after{content:"";position:absolute;inset:25% 12% 30%;background:repeating-linear-gradient(90deg,rgba(255,240,180,.75) 0 10%,transparent 10% 20%)}
+.bk .sd{top:0;right:0;width:var(--h);height:100%;transform-origin:right;transform:rotateY(90deg);background:color-mix(in srgb,var(--c) 45%,#000)}
+.bk .bk-l{top:0;left:0;width:var(--h);height:100%;transform-origin:left;transform:rotateY(-90deg);background:color-mix(in srgb,var(--c) 45%,#000)}
+.bk .bk-b{left:0;top:0;width:100%;height:var(--h);transform-origin:top;transform:rotateX(90deg);background:color-mix(in srgb,var(--c) 60%,#000)}
+.bk.idle{--c:#5b5580}
+.bk.sel .top{background:linear-gradient(135deg,#fff6b0,var(--yellow));box-shadow:0 0 30px var(--yellow),inset 0 0 0 3px #fff}
+.bk.sel .top b,.bk.sel .top small{color:#3a2200;text-shadow:none}
+.bk.sel{animation:lift 1.4s ease-in-out infinite}
+@keyframes lift{0%,100%{transform:translateZ(0)}50%{transform:translateZ(10px)}}
+.bk.hall{--c:#7a6a9a;cursor:default}
+.minfo{margin-top:10px;border-radius:18px;padding:16px;background:#22174a;border:1px solid rgba(255,255,255,.14);min-height:90px}
+.minfo h3{margin:0 0 4px;font-family:var(--ml-display);font-weight:800;font-size:20px;color:#fff}
+.minfo h3 span{color:var(--yellow)}
+.minfo .mraga{font-family:var(--ml-display);font-weight:600;font-size:14px;color:#ffd0e2}
+.minfo ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.minfo li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:8px 10px;border-radius:12px;background:#2f2163;font-family:var(--ml-display);font-weight:700;font-size:16px;color:#fff}
+.minfo li .lv{margin:0}
+.minfo .none{color:#d8cff5;font-family:var(--ml-display);font-weight:600}
+.imap-note{margin:12px 0 0;color:#c9bfe4;font-size:13px;font-family:var(--ml-display);font-weight:600}
+@media (max-width:560px){.imap{padding:18px 12px;border-radius:22px}.scene{--S:66vw;height:calc(var(--S)*1.15)}.mbtn{width:42px;height:42px}}
+/* LOCATION */
+.loc{margin:0 0 40px;border-radius:26px;padding:24px clamp(16px,3vw,34px);background:linear-gradient(150deg,#0b4a2a,#0f2a3a 55%,#1a0f3a);border:1px solid rgba(31,178,74,.5);box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.loc h2{margin:0 0 16px;font-family:var(--ml-display);font-weight:800;font-size:clamp(24px,3.6vw,38px);line-height:1.15;color:#fff;text-shadow:2px 3px 0 #06301a}
+.loc h2 span{display:block;font-family:var(--en-display);font-weight:900;font-size:.5em;letter-spacing:.12em;color:#9ef0b9}
+.loc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.loc-card{display:grid;grid-template-columns:56px minmax(0,1fr);gap:14px;align-items:center;padding:16px;border-radius:18px;text-decoration:none;color:#fff;background:linear-gradient(160deg,#1f2f52,#141c38);border:1px solid rgba(255,255,255,.15);box-shadow:0 6px 0 #0a1024,0 14px 26px rgba(0,0,0,.4);transition:transform .2s}
+.loc-card:hover{transform:translateY(-4px)}
+.loc-card:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+.loc-pin{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;color:#fff;background:var(--p);box-shadow:0 5px 0 rgba(0,0,0,.35),0 0 20px color-mix(in srgb,var(--p) 60%,transparent);animation:bob 2.6s ease-in-out infinite}
+.loc-card:nth-child(2) .loc-pin{animation-delay:-1.3s}
+.loc-pin svg{width:30px;height:30px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.loc-body b{display:block;font-family:var(--ml-display);font-weight:800;font-size:18px;line-height:1.3}
+.loc-body small{display:block;margin-top:3px;color:#d6ddf5;font-family:var(--ml-display);font-weight:600;font-size:14px}
+.loc-body em{display:block;margin-top:6px;font-style:normal;color:var(--yellow);font-family:var(--ml-display);font-weight:700;font-size:14.5px}
+.food-tag{display:inline-block;margin-left:4px;padding:1px 10px;border-radius:99px;background:var(--orange);color:#2a1206;font-family:var(--ml-display);font-weight:800;font-size:.8em;vertical-align:middle}
+.loc-card.food .loc-pin svg{width:28px;height:28px}
+.loc-note{margin:14px 0 0;color:#c9e9d4;font-family:var(--ml-display);font-weight:600;font-size:14px}
+@media (max-width:640px){.loc-grid{grid-template-columns:1fr}.loc{padding:20px 14px;border-radius:22px}.loc-body b{font-size:17px}}
 /* WINNERS POSTER */
 .winners{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:26px;align-items:center;margin:0 0 40px;border-radius:26px;padding:26px clamp(16px,3vw,34px);overflow:hidden;
  background:linear-gradient(150deg,#7a0d4a,#2a0f4a 55%,#0f2a5a);border:1px solid rgba(255,138,196,.5);box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 50px rgba(228,22,127,.22)}
@@ -182,10 +257,10 @@ main{position:relative;z-index:1}
 .bnav{display:none}
 @media (max-width:760px){
  body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
- .bnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));position:fixed;z-index:30;left:0;right:0;bottom:0;
+ .bnav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;z-index:30;left:0;right:0;bottom:0;
   padding:6px max(8px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-right,0px));
   background:rgba(20,11,46,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.14);box-shadow:0 -10px 30px rgba(0,0,0,.45)}
- .bnav a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:12px;color:#e9e2ff;text-decoration:none;font-family:var(--ml-display);font-weight:700;font-size:12px;line-height:1.1;text-align:center}
+ .bnav a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 1px;border-radius:12px;color:#e9e2ff;text-decoration:none;font-family:var(--ml-display);font-weight:700;font-size:11.5px;line-height:1.1;text-align:center}
  .bnav a svg{width:22px;height:22px}
  .bnav a.hl{color:#fff;background:linear-gradient(160deg,#ff5fa8,#e4167f);box-shadow:0 0 16px rgba(228,22,127,.5)}
  .bnav a.hl span{font-family:ui-sans-serif,system-ui,sans-serif;font-size:11px;font-weight:800}
@@ -304,8 +379,8 @@ main{position:relative;z-index:1}
       <div>
         <p class="kicker">വടക്കാഞ്ചേരി ഉപജില്ല</p>
         <h1 class="title3d"><span class="small">കേരളം സ്കൂൾ</span>കലോത്സവം</h1>
-        <p class="en-line">Vadakkanchery Sub District · Kerala School Kalolsavam 2026</p>
-        <p class="venue"><b>ഗവ. ഹയർ സെക്കണ്ടറി സ്കൂൾ പഴയന്നൂർ</b> &amp; <b>എ.എൽ.പി.എസ് കുന്നത്തറ</b></p>
+        <p class="en-line">Wadakkanchery Sub District · Kerala School Kalolsavam 2026</p>
+        <p class="venue"><b>ഗവ. ഹയർ സെക്കണ്ടറി സ്കൂൾ പഴയന്നൂർ</b> &amp; <b>എ.എൽ.പി.എസ് കുന്നത്തറ</b> <span class="food-tag">ഭക്ഷണ കേന്ദ്രം</span></p>
         <div class="cubes" aria-label="2026 നവംബർ 16, 17, 18, 19">
           <span class="month">2026 നവംബർ</span>
           <div class="cube"><div class="in"><div class="f front" style="background:var(--d1);color:#fff">16</div><div class="f top" style="background:#fff;color:var(--d1)">തിങ്കൾ</div></div></div>
@@ -358,6 +433,43 @@ main{position:relative;z-index:1}
       <div class="person"><b>അബ്ദുൾ ഗഫൂർ എ എ</b><span>അറബിക് കൺവീനർ</span></div>
       <div class="person"><b>ഡോ. സിന്ധു കെ. കുമാർ</b><span>സംസ്കൃതം കൺവീനർ</span></div>
     </div>
+    <section class="loc" id="location">
+      <h2>വേദികളിലേക്കുള്ള വഴി<span>Venue Location</span></h2>
+      <div class="loc-grid">
+        <a class="loc-card" href="https://www.google.com/maps/search/?api=1&query=Govt+Higher+Secondary+School+Pazhayannur%2C+Thrissur%2C+Kerala" target="_blank" rel="noopener">
+          <span class="loc-pin" style="--p:var(--magenta)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span>
+          <span class="loc-body"><b>ഗവ. ഹയർ സെക്കണ്ടറി സ്കൂൾ, പഴയന്നൂർ</b><small>GHSS Pazhayannur · പ്രധാന വേദി · വേദി 1–14, ഗ്രൗണ്ട്</small><em>Google Maps-ൽ വഴി കാണുക →</em></span>
+        </a>
+        <a class="loc-card food" href="https://www.google.com/maps/search/?api=1&query=ALPS+Kunnathara%2C+Pazhayannur%2C+Thrissur%2C+Kerala" target="_blank" rel="noopener">
+          <span class="loc-pin" style="--p:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v8a2 2 0 0 0 4 0V2M9 10v12M17 2c-2 1.5-3 4-3 7v4h3v9"/></svg></span>
+          <span class="loc-body"><b>എ.എൽ.പി.എസ്, കുന്നത്തറ</b><small>ALPS Kunnathara · ഭക്ഷണ കേന്ദ്രം (Food Spot) · ഇവിടെ മത്സര വേദികളില്ല</small><em>Google Maps-ൽ വഴി കാണുക →</em></span>
+        </a>
+      </div>
+      <p class="loc-note">വടക്കാഞ്ചേരി ഉപജില്ല · പഴയന്നൂർ, തൃശ്ശൂർ ജില്ല</p>
+    </section>
+    <section class="imap" id="map">
+      <div class="imap-head">
+        <h2>ഇൻഡോർ മാപ്പ്<span>GHSS Pazhayannur · 3D Venue Map</span></h2>
+        <div class="imap-ctrl">
+          <button type="button" class="mbtn" id="rotL" aria-label="ഇടത്തേക്ക് തിരിക്കുക">⟲</button>
+          <button type="button" class="mbtn" id="tiltB" aria-label="കാഴ്ച മാറ്റുക">3D</button>
+          <button type="button" class="mbtn" id="rotR" aria-label="വലത്തേക്ക് തിരിക്കുക">⟳</button>
+        </div>
+      </div>
+      <p class="imap-hint">ഒരു വേദിയിൽ തൊട്ടാൽ ആ ദിവസം അവിടെ നടക്കുന്ന ഇനങ്ങൾ താഴെ കാണാം. വലിച്ചു നീക്കി മാപ്പ് തിരിക്കാം.</p>
+      <div class="imap-days" id="mapDays"></div>
+      <div class="scene" id="scene">
+        <div class="plane" id="plane">
+          <div class="campus"></div>
+          <div class="road r1"></div><div class="road r2"></div>
+          <div class="field"><span>ഗ്രൗണ്ട്</span></div>
+          <div class="gate"><span>പ്രവേശന കവാടം</span></div>
+          <div id="blocks"></div>
+        </div>
+      </div>
+      <div class="minfo" id="minfo" aria-live="polite"></div>
+      <p class="imap-note">ഇത് വേദികൾ എളുപ്പം കണ്ടെത്താനുള്ള മാതൃകാ രൂപരേഖയാണ്. കെട്ടിടങ്ങളുടെ യഥാർത്ഥ സ്ഥാനം വ്യത്യാസപ്പെടാം; വേദികളിലെ ബോർഡുകൾ ശ്രദ്ധിക്കുക.</p>
+    </section>
     <section class="result" id="result">
       <div class="res-top">
         <div class="trophy" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff6b0"/><stop offset=".5" stop-color="#ffd60a"/><stop offset="1" stop-color="#b37400"/></linearGradient></defs>
@@ -398,6 +510,7 @@ main{position:relative;z-index:1}
 <nav class="bnav" aria-label="പ്രധാന മെനു">
   <a href="#schedule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span>വേദികൾ</span></a>
   <a href="#offstage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span>സ്റ്റേജിതരം</span></a>
+  <a href="#location"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span>ലൊക്കേഷൻ</span></a>
   <a href="#result"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4c0 3 1.5 5 3.5 5M17 6h3c0 3-1.5 5-3.5 5"/></svg><span>റിസൾട്ട്</span></a>
   <a class="hl" href="https://gafuurattuur-cyber.github.io/WINNERS-POSTER/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M12 7l1.5 3 3.3.5-2.4 2.3.6 3.2-3-1.6-3 1.6.6-3.2-2.4-2.3 3.3-.5z"/></svg><span>Winners Poster</span></a>
 </nav>
@@ -516,6 +629,7 @@ function render(){
  });
  $('#grid').innerHTML=html;
  applyFilter();bindTilt();
+ if(window.KAL&&KAL.onDay)KAL.onDay(cur);
 }
 function applyFilter(){
  document.querySelectorAll('.stage').forEach(st=>{
@@ -545,6 +659,7 @@ $('#q').addEventListener('input',e=>{q=e.target.value.trim();applyFilter()});
 /* pick day: today during the festival, else last viewed */
 const now=new Date(),y=now.getFullYear(),m=now.getMonth(),dd=now.getDate();
 if(y===2026&&m===10&&dd>=16&&dd<=19)cur=dd-15;else{try{const s=+localStorage.getItem('kal-day');if(s>=1&&s<=4)cur=s}catch(_){}}
+window.KAL={DAYS,R,ICON,get cur(){return cur},setDay(d){cur=d;render()}};
 render();
 
 /* countdown to 16 Nov 2026, 10:00 IST */
@@ -595,5 +710,56 @@ frame();
 (function(){const n=Date.now(),st=document.getElementById('resStatus');
  if(n>=Date.parse('2026-11-19T23:59:00+05:30'))st.innerHTML='<i></i>മത്സരങ്ങൾ സമാപിച്ചു · ഫലം പോർട്ടലിൽ കാണാം';
  else if(n>=Date.parse('2026-11-16T10:00:00+05:30'))st.innerHTML='<i></i>ഫലങ്ങൾ തത്സമയം വന്നുകൊണ്ടിരിക്കുന്നു';})();
+
+/* ---------- 3D indoor map ---------- */
+(function(){
+ const K=window.KAL;if(!K)return;
+ // illustrative layout: x,y,w,d in % of campus; h in px (scaled)
+ const L={
+  1:[3,4,13,16],2:[17,4,13,16],3:[31,4,13,16],
+  4:[3,24,13,14],5:[17,24,13,14],6:[31,24,13,14],
+  7:[3,40,13,14],8:[17,40,13,14],9:[31,40,13,14],
+  10:[57,4,13,15],11:[71,4,13,15],12:[85,4,12,15],
+  13:[57,24,19,15],14:[78,24,19,15]
+ };
+ const DC=['','#ff3b5c','#ffd60a','#3b82f6','#22c55e'];
+ const VC=['#e4167f','#ff8a00','#8b3fd9','#14b8a6','#1d4fd8','#ef2b2b','#d97706'];
+ const box=document.getElementById('blocks'),plane=document.getElementById('plane'),info=document.getElementById('minfo'),md=document.getElementById('mapDays');
+ let sel=1,day=K.cur,rz=-32,tx=56;
+ const scaleH=()=>Math.max(14,Math.min(34,innerWidth*.05));
+ function build(){
+  const h=scaleH(),st=K.DAYS[day-1].st;let out='';
+  for(const k in L){const [x,y,w,d]=L[k],has=!!st[k];
+   out+=`<div class="bk${has?'':' idle'}${+k===sel?' sel':''}" data-v="${k}" role="button" tabindex="0" aria-label="വേദി ${k}" style="--x:${x}%;--y:${y}%;--w:${w}%;--d:${d}%;--h:${(+k===sel?h*1.5:h)}px;--c:${VC[k%VC.length]}">
+    <div class="f bk-b"></div><div class="f bk-l"></div><div class="f fr"></div><div class="f sd"></div><div class="f top"><div><b>${k}</b><small>${K.R[k]}</small></div></div></div>`;}
+  box.innerHTML=out;
+  md.innerHTML=K.DAYS.map(D=>`<button type="button" data-d="${D.d}" style="--dc:${DC[D.d]}" aria-pressed="${D.d===day}">${D.date.slice(0,5)} ${D.w}</button>`).join('');
+  showInfo();
+ }
+ function showInfo(){
+  const D=K.DAYS[day-1],s=sel==='G'?D.st.G:D.st[sel];
+  const title=sel==='G'?'ഗ്രൗണ്ട്':`വേദി <span>${sel}</span>`;
+  const raga=sel==='G'?'മൈതാനം':K.R[sel];
+  info.innerHTML=`<h3>${title} · ${D.date.slice(0,5)} ${D.w}</h3><div class="mraga">${raga}${s&&s.g?' · '+s.g:''}</div>`+
+   (s?`<ul>${s.i.map(([n,sub,l])=>`<li>${n}${sub?` <small style="color:#ffe58a">(${sub})</small>`:''}${l?`<span class="lv">${l.split(',').map(x=>`<span class="${x}">${x}</span>`).join('')}</span>`:''}</li>`).join('')}</ul>`:'<p class="none">ഈ ദിവസം ഈ വേദിയിൽ മത്സരങ്ങളില്ല.</p>');
+ }
+ box.addEventListener('click',e=>{const b=e.target.closest('.bk');if(!b||moved)return;sel=+b.dataset.v;build()});
+ box.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const b=e.target.closest('.bk');if(b){e.preventDefault();sel=+b.dataset.v;build();box.querySelector(`[data-v="${sel}"]`).focus()}}});
+ document.querySelector('.field').addEventListener('click',()=>{if(moved)return;sel='G';build()});
+ document.querySelector('.field').style.cursor='pointer';
+ md.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;day=+b.dataset.d;build()});
+ const apply=()=>{plane.style.setProperty('--rz',rz+'deg');plane.style.setProperty('--tx',tx+'deg')};
+ document.getElementById('rotL').onclick=()=>{rz-=45;apply()};
+ document.getElementById('rotR').onclick=()=>{rz+=45;apply()};
+ document.getElementById('tiltB').onclick=()=>{tx=tx>40?(tx>=56?30:56):56;if(tx===30&&false){}apply()};
+ // drag to rotate
+ let sx=null,sr=0,moved=false;const sc=document.getElementById('scene');
+ sc.addEventListener('pointerdown',e=>{sx=e.clientX;sr=rz;moved=false;plane.classList.add('drag')});
+ addEventListener('pointermove',e=>{if(sx===null)return;const dx=e.clientX-sx;if(Math.abs(dx)>6)moved=true;rz=sr+dx*.4;apply()});
+ addEventListener('pointerup',()=>{if(sx===null)return;sx=null;plane.classList.remove('drag');setTimeout(()=>moved=false,30)});
+ K.onDay=d=>{day=d;build()};
+ addEventListener('resize',()=>build());
+ apply();build();
+})();
 </script>
 </body></html>

@@ -180,7 +180,7 @@ main{position:relative;z-index:1}
 .scene:active{cursor:grabbing}
 .plane{--u:calc(var(--S)/1600);position:relative;width:var(--S);height:calc(var(--S)*.675);transform-style:preserve-3d;transform:rotateX(var(--tx,50deg)) rotateZ(var(--rz,0deg));transition:transform .6s cubic-bezier(.2,.8,.2,1)}
 .plane.drag,.plane.drag .bb{transition:none}
-.ground{position:absolute;inset:0;border-radius:14px;background:radial-gradient(rgba(0,0,0,.05) 1px,transparent 1px) 0 0/12px 12px,linear-gradient(135deg,#eef3e6,#dfe8d6);box-shadow:0 0 0 5px #b9c4ad,0 40px 60px rgba(0,0,0,.6)}
+.mground{position:absolute;inset:0;border-radius:14px;background:radial-gradient(rgba(0,0,0,.05) 1px,transparent 1px) 0 0/12px 12px,linear-gradient(135deg,#eef3e6,#dfe8d6);box-shadow:0 0 0 5px #b9c4ad,0 40px 60px rgba(0,0,0,.6)}
 .p-abs{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--d)}
 .track{border-radius:999px;background:radial-gradient(ellipse at center,#bfe3a8 0 38%,#f2c9c0 39% 100%);box-shadow:inset 0 0 0 calc(var(--u)*4) #fff}
 .road{background:#2b2b33;background-image:linear-gradient(90deg,transparent 48%,#fff 48% 52%,transparent 52%);background-size:calc(var(--u)*40) 100%;background-repeat:repeat-x}
@@ -772,7 +772,7 @@ frame();
   return `<div class="bk${cls||''}" style="--x:${X(x)};--y:${Y(y)};--w:${X(w)};--d:${Y(d)};--h:calc(var(--u)*${h});--roof:${roof||'#f7f5fb'};--fs:${fs||30}"><div class="f bkf"></div><div class="f lf"></div><div class="f fr"></div><div class="f sd"></div><div class="f top">${label?`<i>${label}</i>`:''}</div></div>`;
  }
  function staticHTML(){
-  let o='<div class="ground"></div>';
+  let o='<div class="mground"></div>';
   o+=`<div class="p-abs track" style="--x:${X(70)};--y:${Y(812)};--w:${X(590)};--d:${Y(113)}"></div>`;
   o+=`<div class="p-abs road h" style="--x:0%;--y:${Y(940)};--w:100%;--d:${Y(45)}"></div>`;
   o+=`<div class="p-abs road v" style="--x:${X(680)};--y:${Y(845)};--w:${X(50)};--d:${Y(98)}"></div>`;
@@ -794,6 +794,7 @@ frame();
   md.innerHTML=K.DAYS.map(D=>`<button type="button" data-d="${D.d}" style="--dc:${DC[D.d]}" aria-pressed="${D.d===day}">${D.date.slice(0,5)} ${D.w}</button>`).join('');
   showInfo();
  }
+
  function showInfo(){
   const D=K.DAYS[day-1],s=sel==='G'?D.st.G:D.st[sel];
   const title=sel==='G'?'ഗ്രൗണ്ട്':`വേദി <span>${sel}</span>`;
